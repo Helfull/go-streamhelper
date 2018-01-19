@@ -1,0 +1,7 @@
+ {
+    "server": "irc.chat.twitch.tv:443",
+    "debug": false,
+    "nickname": "YOUR_BOT_NICKNAME",
+    "Oauth": "YOUR_BOTS_OAUTH_TOKEN",
+    "Channel": "#THE_CHANNEL_THE_BOT_SHOULD_JOIN"
+ }
