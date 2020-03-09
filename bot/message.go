@@ -5,17 +5,14 @@ import (
 	"strings"
 )
 
-const (
-	MESSAGE_DELIMITER = " :"
-)
-
 type MsgTyp int
 
 const (
-	MSG_UNKNOWN   = 0
-	MSG_PRIVMSG   = 1
-	MSG_WHISPER   = 2
-	MSG_CLEARCHAT = 3
+	MessageDelimiter = " :"
+	MessageUnknown   = 0
+	MessagePrivate   = 1
+	MessageWhisper   = 2
+	MessageClearChat = 3
 )
 
 type Message struct {
@@ -31,7 +28,7 @@ func parseMessage(line string) *Message {
 	msg := &Message{
 		raw: line,
 	}
-	splitLine := strings.SplitN(line, MESSAGE_DELIMITER, 3)
+	splitLine := strings.SplitN(line, MessageDelimiter, 3)
 
 	msg.Tags = parseTags(splitLine[0])
 	var username string
@@ -66,13 +63,13 @@ func parseMiddle(rawMiddle string) (username string, msgType MsgTyp, channel str
 func getMsgType(rawType string) MsgTyp {
 	switch rawType {
 	case "PRIVMSG":
-		return MSG_PRIVMSG
+		return MessagePrivate
 	case "WHISPER":
-		return MSG_WHISPER
+		return MessageWhisper
 	case "CLEARCHAT":
-		return MSG_CLEARCHAT
+		return MessageClearChat
 	default:
-		return MSG_UNKNOWN
+		return MessageUnknown
 	}
 }
 

@@ -62,12 +62,12 @@ func Create(configFile string, cmdHandlers []*CommandHandler) *Bot {
 // Loop does run the bot and wait for commands
 func (bot *Bot) Loop() {
 	bot.irccon.Connect()
-	bot.irccon.On(MSG_PRIVMSG, func(msg *Message) {
+	bot.irccon.On(MessagePrivate, func(msg *Message) {
 		switch msg.Type {
-		case MSG_PRIVMSG:
+		case MessagePrivate:
 			bot.handleMessage(msg)
-		case MSG_UNKNOWN:
-			fmt.Printf("Unknown Message Type", msg.raw)
+		case MessageUnknown:
+			fmt.Printf("Unknown Message Type [%s]", msg.raw)
 		}
 	})
 	bot.irccon.Loop()
