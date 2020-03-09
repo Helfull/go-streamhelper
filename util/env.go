@@ -8,26 +8,48 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var ErrEnvVarEmpty = errors.New("getenv: environment variable empty")
+var errEnvVarEmpty = errors.New("getenv: environment variable empty")
 
-func LoadDotEnv() (map[string]string, error) {
+var loadedVariables map[string]string
+
+// LoadDotEnv loads all environment variables
+func LoadDotEnv(fileNames ...string) (map[string]string, error) {
 
 	var env map[string]string
-	env, err := godotenv.Read()
+
+	env, err := godotenv.Read(fileNames...)
+
+	loadedVariables = env
 
 	return env, err
 }
 
-func GetEnvStr(key string, fallback string) (string, error) {
-	v := os.Getenv(key)
-	if v == "" {
-		return fallback, ErrEnvVarEmpty
+// GetEnvStr gets the environment variable of the name
+// Environment variables have priority over loaded Variables
+// it does return the fallback if the variable name is not found
+func GetEnvStr(name string, fallback string) (string, error) {
+	var ok bool
+	var v string
+	v, ok = os.LookupEnv(name)
+
+	if ok {
+		return v, nil
 	}
-	return v, nil
+
+	v, ok = loadedVariables[name]
+
+	if ok {
+		return v, nil
+	}
+
+	return fallback, errEnvVarEmpty
 }
 
-func GetEnvInt(key string, fallback int) (int, error) {
-	s, err := GetEnvStr(key, "")
+// GetEnvInt gets the environment variable of the name
+// Environment variables have priority over loaded Variables
+// it does return the fallback if the variable name is not found
+func GetEnvInt(name string, fallback int) (int, error) {
+	s, err := GetEnvStr(name, "")
 	if err != nil {
 		return fallback, err
 	}
@@ -38,8 +60,11 @@ func GetEnvInt(key string, fallback int) (int, error) {
 	return v, nil
 }
 
-func GetEnvBool(key string, fallback bool) (bool, error) {
-	s, err := GetEnvStr(key, "false")
+// GetEnvBool gets the environment variable of the name
+// Environment variables have priority over loaded Variables
+// it does return the fallback if the variable name is not found
+func GetEnvBool(name string, fallback bool) (bool, error) {
+	s, err := GetEnvStr(name, "false")
 	if err != nil {
 		return fallback, err
 	}
