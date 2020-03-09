@@ -15,7 +15,7 @@ func TestConfig(t *testing.T) {
 			So(expectedCfg, ShouldHaveSameTypeAs, resultCfg)
 		})
 
-		Convey("It should panic if any error happend", func() {
+		Convey("It should panic if any error happened", func() {
 			So(func() { GetConfig("SOME NOT EXISTING FILE") }, ShouldPanic)
 		})
 	})
