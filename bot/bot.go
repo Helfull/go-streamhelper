@@ -37,6 +37,8 @@ func (bot *Bot) handleMessage(msg *Message) {
 	}
 }
 
+// Create a new bot instance with the configFile
+// and the cmdHandlers
 func Create(configFile string, cmdHandlers []*CommandHandler) *Bot {
 	config := GetConfig("./settings.json")
 
@@ -57,6 +59,7 @@ func Create(configFile string, cmdHandlers []*CommandHandler) *Bot {
 	return &bot
 }
 
+// Loop does run the bot and wait for commands
 func (bot *Bot) Loop() {
 	bot.irccon.Connect()
 	bot.irccon.On(MSG_PRIVMSG, func(msg *Message) {

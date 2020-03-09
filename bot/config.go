@@ -7,6 +7,8 @@ import (
 	"github.com/helfull/go-streamhelper/util"
 )
 
+// Config structure
+// containing all configurable fields
 type Config struct {
 	Server string `json:"server"`
 
@@ -17,6 +19,9 @@ type Config struct {
 	Channel  string `json:"Channel"`
 }
 
+// GetConfig from a config file
+// the config file entries will be overwritten
+// by environment variables and the .env file
 func GetConfig(configFile string) Config {
 
 	raw, err := ioutil.ReadFile(configFile)
