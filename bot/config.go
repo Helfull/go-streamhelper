@@ -27,9 +27,33 @@ func GetConfig(configFile string) Config {
 	var config Config
 	json.Unmarshal(raw, &config)
 
+	config.loadEnvVars()
 	return config
 }
 
+func (config *Config) loadEnvVars() (*Config, error) {
+	util.LoadDotEnv()
+	var err error
+	config.Server, err = util.GetEnvStr("SH_SERVER", config.Server)
+	if err != nil {
+		return nil, err
+	}
+	config.Debug, err = util.GetEnvBool("SH_DEBUG", config.Debug)
+	if err != nil {
+		return nil, err
+	}
+	config.Channel, err = util.GetEnvStr("SH_CHANNEL", config.Channel)
+	if err != nil {
+		return nil, err
+	}
+	config.Oauth, err = util.GetEnvStr("SH_OAUTH", config.Oauth)
+	if err != nil {
+		return nil, err
+	}
+	config.Nickname, err = util.GetEnvStr("SH_NICKNAME", config.Nickname)
+	if err != nil {
+		return nil, err
+	}
 
 	return config, nil
 }
